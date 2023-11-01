@@ -1,0 +1,10 @@
+
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('./fonts/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf') format('truetype');
+  /* Add additional font formats if available */
+}
+
+header , .p-2 {
+  font-family: 'Pixelify Sans', sans-serif;
+}

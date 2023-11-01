@@ -1,12 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game of Tic Tac Toe</title>
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/font.css">
+    <script src="script/script.js" defer></script>
 </head>
+
 <body>
-    <h1 class="text-center bg-red-500">Game of Tic Tac Toe</h1>
+    <div class="grid grid-rows-[200px_740px] mx-10 gap-2 my-2">
+        <header
+            class="flex justify-center items-center rounded-3xl bg-gradient-to-r from-gray-200 to-gray-100 shadow-2xl hover:border-4 border-black border-double">
+            <h1 class="text-8xl hover:font-extrabold">Tic Tac Toe</h1>
+        </header>
+        <main class="grid grid-col-[1fr_4fr_1fr] border-2 border-black rounded-3xl bg-gray-100">
+            <div id="Player1" class="col-start-1 col-end-2 border-2 border-black rounded-3xl bg-gray-200">
+                <h1 class="text-4xl">Player 1 Score:</h1>
+            </div>
+            <div id="Player2" class="col-start-3 col-end-4 border-2 border-black rounded-3xl bg-gray-200">
+                <h1 class="text-4xl">Player 2 Score:</h1>
+            </div>
+        </main>
+    </div>
 </body>
+<footer class="border-2 border-black rounded-t-lg bg-gray-200 h-16 mx-10">
+    <div class="flex items-center justify-center mt-4">
+        <p class="font-semibold">
+            Copyright ©
+            <script>
+                document.write(new Date().getFullYear())
+            </script>
+            Anonymus1145
+        </p>
+    </div>
+</footer>
+
 </html>
