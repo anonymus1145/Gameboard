@@ -5,7 +5,8 @@ module.exports = {
     extend: {
       gridTemplateRows: {
         // Complex site-specific row configuration
-        'layout': '200px 740px',
+        'layout': '200px',
+        'body' : '1fr auto'
       },
       gridTemplateColumns: {
         // Complex site-specific column configuration
