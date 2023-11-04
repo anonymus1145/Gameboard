@@ -19,7 +19,7 @@ const player = {
     alert(this.type + " win!");
   },
   random: function () {
-    return Math.floor(Math.random() * 9);
+    return Math.floor(Math.random() * 9) + 1;
   },
   winCombo: function () {
     if (
@@ -79,6 +79,8 @@ const player = {
 // Modal
 function ask() {
   const showModal = document.getElementById("dialog");
+  const playButton = document.getElementById("play");
+  playButton.disabled = true;
   dialog.showModal();
   start();
 }
@@ -88,49 +90,54 @@ function start() {
   const pVp = document.getElementById("pVp");
   const pVc = document.getElementById("pVc");
 
+  const player1 = Object.create(player);
+  player1.type = prompt("Insert your name: ");
+  player1.symbol = "X";
+  player1.markedCells = [];
+
 
   // Player vs Player
 
   pVp.addEventListener("click", () => {
     dialog.close();
 
-    const player1 = Object.create(player);
-    player1.type = "Player 1";
-    player1.symbol = "X";
-
     const player2 = Object.create(player);
-    player2.type = "Player 2";
+    player2.type = prompt("Player 2 insert your name: ");
     player2.symbol = "O";
+    player2.markedCells = [];
 
-    let currentPlayer = "Player 1";
+    let currentPlayer = "Player";
 
     for (let i = 0; i <= 9; i++) {
       document.addEventListener("click", (event) => {
         if (event.target === document.getElementById("square" + [i])) {
-          if (currentPlayer === "Player 1") {
+          if (currentPlayer === "Player") {
             player1.markedCells.push("square" + [i]);
             gamepad.gameBoard.push("square" + [i]);
-            document.getElementById("square" + [i]).innerHTML = player1.symbol;
-              if (gamepad.isFull() === true) {
-                if (player1.winCombo() === true) {
-                  player1.alertWin();
-                }
-              }
+            document.getElementById("square" + [i]).innerText = player1.symbol;
+            currentPlayer = "Player 2";
+            if (player1.winCombo() === true) {
+              setTimeout(() => {
+                location.reload();
+                player1.alertWin();
+              }, 1000);
+            } else if (gamepad.isFull() === true) {
+              setTimeout(() => {
+                location.reload();
+                alert("We have a draw!");
+              }, 1000);
+            }
           } else {
             player2.markedCells.push("square" + [i]);
             gamepad.gameBoard.push("square" + [i]);
-            document.getElementById("square" + [i]).innerHTML = player2.symbol;
-              if (gamepad.isFull() === true) {
-                if (player2.winCombo() === true) {
-                  player2.alertWin();
-                }
-              } 
-          }
-          
-          if (currentPlayer === "Player 1") {
-            currentPlayer = "Player 2";
-          } else {
-            currentPlayer = "Player 1";
+            document.getElementById("square" + [i]).innerText = player2.symbol;
+            currentPlayer = "Player";
+            if (player2.winCombo() === true) {
+              setTimeout(() => {
+                location.reload();
+                player2.alertWin();
+              }, 1000);
+            }
           }
         }
       })
@@ -143,27 +150,54 @@ function start() {
   pVc.addEventListener("click", () => {
     dialog.close();
 
-    const player1 = Object.create(player);
-    player1.type = "Player";
-    player1.symbol = "X";
-
     const computer = Object.create(player);
     computer.type = "Computer";
     computer.symbol = "O";
+    computer.markedCells = [];
+
+    let computerMove = computer.random();
 
     for (let i = 0; i <= 9; i++) {
-      if (i % 2 === 0) {
-        document.addEventListener("click", (event) => {
-          if (event.target === document.getElementById("square" + [i])) {
-            player1.markedCells++;
-            document.getElementById("square" + [i]).innerHTML = player1.symbol;
+      // Player turn
+      document.addEventListener("click", (event) => {
+        if (event.target === document.getElementById("square" + [i])) {
+          player1.markedCells.push("square" + [i]);
+          gamepad.gameBoard.push("square" + [i]);
+          document.getElementById("square" + [i]).innerHTML = player1.symbol;
+
+          if (player1.winCombo() === true) {
+            setTimeout(() => {
+              location.reload();
+              player1.alertWin();
+            }, 1000);
+          } else if (gamepad.isFull() === true) {
+            setTimeout(() => {
+              location.reload();
+              alert("We have a draw!");
+            }, 1000);
           }
-        })
-      } else {
-        computer.markedCells++;
-        let random = computer.random();
-        document.getElementById("square" + [random]).innerHTML = computer.symbol;
-      }
+          // Computer turn 
+          while (gamepad.gameBoard.includes("square" + computerMove)) {
+            computerMove = computer.random();
+          }
+          computer.markedCells.push("square" + computerMove);
+          gamepad.gameBoard.push("square" + computerMove);
+          setTimeout(() => {
+            document.getElementById("square" + computerMove).innerHTML = computer.symbol;
+          }, 1000); // Add a delay of 1 second before displaying the computer's move
+          currentPlayer = "Player";
+
+          if (computer.winCombo() === true) {
+            setTimeout(() => {
+              location.reload();
+              computer.alertWin();
+            }, 1000);
+          }
+        }
+      })
     }
   })
+  player1.markedCells = [];
+  computer.markedCells = [];
+  gamepad.gameBoard = [];
 }
